@@ -1,7 +1,7 @@
 # STATS 503 Project
 
+We are group 21 in University of Michigan Stats 503 WN2023
 ## Project introduction
-
 
 This project is related to Bank Account Fraud.
 
