@@ -14,5 +14,3 @@ Credit_Score_Classification contains another data set and related notebooks
 Data contains data zip file we downloaded from kaggle and a manually created metadata
 
 Notebooks contain EDA and DataPrepare
-
-test from yy
