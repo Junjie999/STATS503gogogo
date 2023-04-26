@@ -7,6 +7,23 @@ from imblearn.under_sampling import RandomUnderSampler
 import matplotlib.pyplot as plt
 import pandas as pd
 
+# 读数据
+import zipfile
+def read_data():
+    zf = zipfile.ZipFile('../Data/Base.csv.zip') 
+    df = pd.read_csv(zf.open('Base.csv'))
+
+    df = df.drop(['device_fraud_count'], axis=1) 
+
+    df = df[df.bank_months_count != -1]
+    df = df[df.session_length_in_minutes != -1]
+    df = df[df.device_distinct_emails_8w != -1] 
+
+    df=df.reset_index(drop=True)
+
+    print("读好数据啦！")
+    return df
+
 # 重新分配label，使得label0的数量是label1数量的4倍
 def undersample(df):
     X = df.drop('fraud_bool', axis=1)
@@ -21,7 +38,7 @@ def undersample(df):
     under_sampler = RandomUnderSampler(sampling_strategy=sampling_strategy, random_state=42)
     X_train_resampled, y_train_resampled = under_sampler.fit_resample(X, y)
 
-    print("After resampling:")
+    print("在Resampling之后有")
     print(pd.Series(y_train_resampled).value_counts())
 
     df_resampled = pd.concat([X_train_resampled,y_train_resampled],axis=1)
