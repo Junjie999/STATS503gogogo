@@ -38,7 +38,7 @@ def undersample(df):
     under_sampler = RandomUnderSampler(sampling_strategy=sampling_strategy, random_state=42)
     X_train_resampled, y_train_resampled = under_sampler.fit_resample(X, y)
 
-    print("在Resampling之后有")
+    print("在Under Sampling之后有")
     print("没问题的",y_train_resampled.value_counts()[0],"个")
     print("有问题的",y_train_resampled.value_counts()[1],"个")
 
@@ -57,6 +57,29 @@ def under_split(df):
 
     X_train = df_resampled.drop('fraud_bool',axis=1)
     y_train = df_resampled['fraud_bool']
+
+    return X_train, X_test, y_train, y_test
+
+from imblearn.over_sampling import SMOTE
+# 给dataframe输出oversampled好的X_train, X_test, y_train, y_test
+def over_split(df):
+    X = df.drop('fraud_bool',axis=1)
+    y = df['fraud_bool']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    smote = SMOTE(random_state=42)
+    X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
+
+    df_resampled = pd.concat([X_train_resampled,y_train_resampled],axis=1)
+    df_resampled = df_resampled.sample(frac=1)
+
+    X_train = df_resampled.drop('fraud_bool',axis=1)
+    y_train = df_resampled['fraud_bool']
+
+    print("在Over Sampling之后有")
+    print("没问题的",y_train.value_counts()[0],"个")
+    print("有问题的",y_train.value_counts()[1],"个")
 
     return X_train, X_test, y_train, y_test
 
