@@ -27,7 +27,6 @@ def undersample(df):
     df_resampled = pd.concat([X_train_resampled,y_train_resampled],axis=1)
     return df_resampled
 
-
 from sklearn.preprocessing import OneHotEncoder
 def encode(df_resampled):
     cate_var = ['payment_type','employment_status','housing_status',
@@ -45,7 +44,6 @@ def encode(df_resampled):
     print(df_resampled_encoder.shape)
 
     return df_resampled_encoder
-
 
 from sklearn.metrics import roc_curve, auc 
 # Compute the True Positive Rate and the False Positive Rate
