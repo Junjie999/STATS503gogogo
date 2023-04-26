@@ -39,10 +39,26 @@ def undersample(df):
     X_train_resampled, y_train_resampled = under_sampler.fit_resample(X, y)
 
     print("在Resampling之后有")
-    print(pd.Series(y_train_resampled).value_counts())
+    print("没问题的",y_train_resampled.value_counts()[0],"个")
+    print("有问题的",y_train_resampled.value_counts()[1],"个")
 
     df_resampled = pd.concat([X_train_resampled,y_train_resampled],axis=1)
     return df_resampled
+
+# 给dataframe输出undersampled好的X_train, X_test, y_train, y_test
+def under_split(df):
+    X = df.drop('fraud_bool',axis=1)
+    y = df['fraud_bool']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    df_resampled = undersample(pd.concat([X_train,y_train],axis=1))
+    df_resampled = df_resampled.sample(frac=1)
+
+    X_train = df_resampled.drop('fraud_bool',axis=1)
+    y_train = df_resampled['fraud_bool']
+
+    return X_train, X_test, y_train, y_test
 
 from sklearn.preprocessing import OneHotEncoder
 def encode(df_resampled):
@@ -57,7 +73,7 @@ def encode(df_resampled):
     one_hot_encoded_df = pd.DataFrame(one_hot_encoded_data, columns=columns)
     df_resampled_encoder = pd.concat([df_resampled.drop(cate_var,axis=1), one_hot_encoded_df], axis=1)
 
-    print("After encoding:")
+    print("使用了OneHotEncoding，得到：")
     print(df_resampled_encoder.shape)
 
     return df_resampled_encoder
